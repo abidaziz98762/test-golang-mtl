@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-gin-app
+  labels:
+    app: my-gin-app
+    org_id: 65a77e89285a0174a4d2a509
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-gin-app
+  template:
+    metadata:
+      labels:
+        app: my-gin-app
+        org_id: 65a77e89285a0174a4d2a509
+      annotations:
+        instrumentation.opentelemetry.io/inject-go: "true"
+        instrumentation.opentelemetry.io/otel-go-auto-target-exe: "/root/main"
+    spec:
+      containers:
+      - name: my-gin-app
+        image: tech2nightcode/go-app:latest
+        env:
+        - name: OTEL_GO_AUTO_TARGET_EXE
+          value: "/root/main"
+        ports:
+        - containerPort: 9999
